@@ -2,7 +2,9 @@ import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -14,10 +16,11 @@ app.listen(PORT, () => {
 });
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "projectweb2",
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  port: process.env.MYSQL_PORT,
 });
 
 db.connect((err) => {
@@ -32,6 +35,10 @@ app.get("/events", (req, res) => {
     res.status(200).json(data);
   });
 });
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
+
 
 
 app.get("/events/:id", (req, res) => {
